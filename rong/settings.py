@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rong.apps.core'
 ]
 
 MIDDLEWARE = [
@@ -83,7 +84,7 @@ DATABASES = {
     )
 #    {
 
-    #        'ENGINE': 'django.db.backends.sqlite3',
+#        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
 }
@@ -129,7 +130,7 @@ STATIC_ROOT = PROJECT_DIR.parent.parent.child('static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    PROJECT_DIR.child('static')
+    PROJECT_DIR.child('static'),
 )
 
 MEDIA_ROOT = PROJECT_DIR.parent.parent.child('media')
