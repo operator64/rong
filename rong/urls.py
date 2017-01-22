@@ -19,7 +19,7 @@ from rong.apps.core import views as core_views
 
 urlpatterns = [
     url(r'^$', core_views.home, name='home'),
-    url(r'^nested_admin/', include('nested_admin.urls')),
+#    url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', admin.site.urls),
 ]

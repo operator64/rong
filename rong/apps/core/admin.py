@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.admin import User
-from .models import Profile, profilefieldview, Field, FieldType
+from .models import Profile, profilefieldview, Field, FieldType, Foo, fooattribute, Attribute, FooAnswer
+from mptt.admin import MPTTModelAdmin
 
 #import nested_admin
 
@@ -16,6 +17,23 @@ from .models import Profile, profilefieldview, Field, FieldType
 
 #class FieldInline(admin.TabularInline):
 #    model = Field
+
+class fooanswerInline(admin.StackedInline):
+    model = FooAnswer
+    extra = 0
+
+class fooattributeInline(admin.TabularInline):
+    model = fooattribute
+    extra = 0
+        
+class FooAdmin(MPTTModelAdmin):
+    model = Foo
+    inlines = (fooattributeInline, fooanswerInline)
+        
+class AttributeAdmin(admin.ModelAdmin):
+    model = Attribute
+  
+
 class FieldTypeAdmin(admin.ModelAdmin):
     model = FieldType
 
@@ -58,7 +76,7 @@ class ProfileInline(admin.TabularInline):
 
 
 class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline, )
+    inlines = (ProfileInline,)
     list_display = ('username','email','first_name','last_name','is_staff','get_location')
     list_select_related = ('profile',)
 
@@ -76,6 +94,8 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Field, FieldAdmin)
 admin.site.register(FieldType,FieldTypeAdmin)
+admin.site.register(Foo, FooAdmin)
+admin.site.register(Attribute, AttributeAdmin)
 # Register your models here.
 
 

@@ -2,7 +2,39 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from mptt.models import MPTTModel, TreeForeignKey
 
+class Attribute(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    def __str__(self):
+        return self.name
+
+class Foo(MPTTModel):
+    name = models.CharField(max_length=30, unique=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    text = models.TextField(max_length=500, blank=True)
+    attribute = models.ManyToManyField(Attribute, through='fooattribute')
+    
+    class MPTTMeta:
+        order_insertion_by = ['name']
+    def __str__(self):
+        return self.name
+
+class FooAnswer(MPTTModel):
+    text = models.TextField(max_length=500, blank=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    foo = models.ForeignKey(Foo, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    #class MPTTMeta:
+    #    order_insertion_by = ['name']
+    def __str__(self):
+        return self.user.username
+
+class fooattribute(models.Model):
+    foo = models.ForeignKey(Foo, on_delete=models.CASCADE)
+    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+    value = models.CharField(max_length=128)
 
 
 class Profile(models.Model):
