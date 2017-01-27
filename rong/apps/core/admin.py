@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.admin import User
-from .models import Profile, profilefieldview, Field, FieldType, Foo, fooattribute, Attribute, FooAnswer
+from .models import Profile, ProfileExpander, Expander, EType, Node, NodeTrait, Trait, NodeNote
 from mptt.admin import MPTTModelAdmin
 
 #import nested_admin
@@ -18,42 +18,56 @@ from mptt.admin import MPTTModelAdmin
 #class FieldInline(admin.TabularInline):
 #    model = Field
 
-class fooanswerInline(admin.StackedInline):
-    model = FooAnswer
+class NodeNoteInline(admin.StackedInline):
+    model = NodeNote
     extra = 0
 
-class fooattributeInline(admin.TabularInline):
-    model = fooattribute
+    verbose_name = 'Comment'
+    verbose_name_plural = 'Comments'
+
+class NodeTraitInline(admin.TabularInline):
+    model = NodeTrait
     extra = 0
+
+    verbose_name = 'Property'
+    verbose_name_plural = 'Properties'
         
-class FooAdmin(MPTTModelAdmin):
-    model = Foo
-    inlines = (fooattributeInline, fooanswerInline)
-        
-class AttributeAdmin(admin.ModelAdmin):
-    model = Attribute
+class NodeAdmin(MPTTModelAdmin):
+    model = Node
+    inlines = (NodeTraitInline, NodeNoteInline)
+
+    verbose_name = 'Entry'
+    verbose_name_plural = 'Entries'
+
+class TraitAdmin(admin.ModelAdmin):
+    model = Trait
+
+    verbose_name = 'Property'
+    verbose_name = 'Properties'
+
   
 
-class FieldTypeAdmin(admin.ModelAdmin):
-    model = FieldType
+class ETypeAdmin(admin.ModelAdmin):
+    model = EType
 
 
-class profilefieldviewInline(admin.TabularInline):
-    model = profilefieldview
+class ProfileExpanderInline(admin.TabularInline):
+    model = ProfileExpander
     extra = 1
     #inlines = (FieldInline,)
-    verbose_name_plural = "Profile Fields"
+    verbose_name_plural = "Additional Profile Fields"
 
 class ProfileAdmin(admin.ModelAdmin):
-    inlines = (profilefieldviewInline,)
+    inlines = (ProfileExpanderInline,)
 
-class FieldAdmin(admin.ModelAdmin):
-    model = Field
+class ExpanderAdmin(admin.ModelAdmin):
+    model = Expander
 #    inlines = (FieldtypeInline,)
 #    list_select_related=('ftype',)
 
 #    def get_fieldtype(seld, instance):
 #        return instance.field.fieldtype
+    verbose_name = "Profile Field"
 
 
 class ProfileInline(admin.TabularInline):
@@ -92,10 +106,10 @@ class CustomUserAdmin(UserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Profile, ProfileAdmin)
-admin.site.register(Field, FieldAdmin)
-admin.site.register(FieldType,FieldTypeAdmin)
-admin.site.register(Foo, FooAdmin)
-admin.site.register(Attribute, AttributeAdmin)
+admin.site.register(Expander, ExpanderAdmin)
+admin.site.register(EType, ETypeAdmin)
+admin.site.register(Node, NodeAdmin)
+admin.site.register(Trait, TraitAdmin)
 # Register your models here.
 
 
